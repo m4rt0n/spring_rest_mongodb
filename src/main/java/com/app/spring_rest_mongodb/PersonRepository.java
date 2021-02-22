@@ -10,7 +10,7 @@ public interface PersonRepository extends MongoRepository<Person, String> {
 
 	Person findByName(String name);
 
-	List<Person> findAllOrderedByName();
+	List<Person> findAllByOrderByNameAsc();
 
 	List<Person> findAllByHobby(String hobby);
 }

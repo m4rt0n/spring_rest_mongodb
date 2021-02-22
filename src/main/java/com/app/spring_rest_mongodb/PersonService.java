@@ -34,8 +34,8 @@ public class PersonService implements IPersonService {
 	}
 
 	@Override
-	public List<Person> findAllOrderedByName() {
-		return repo.findAllOrderedByName();
+	public List<Person> findAllByOrderByNameAsc() {
+		return repo.findAllByOrderByNameAsc();
 	}
 
 	@Override

@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/person")
-public class Controller {
+public class PersonController {
 	@Autowired
 	private PersonService service;
 
-	@GetMapping("/all")
+	@GetMapping("/getall")
 	public Iterable<Person> getAllPerson() {
 		return service.findAll();
 	}
@@ -43,9 +43,9 @@ public class Controller {
 		return service.findByName(name);
 	}
 
-	@GetMapping("/orderbyname")
-	public List<Person> findAllOrderedByName() {
-		return service.findAllOrderedByName();
+	@GetMapping("/getallorderbyname")
+	public List<Person> findAllByOrderByNameAsc() {
+		return service.findAllByOrderByNameAsc();
 	}
 
 }

@@ -14,5 +14,5 @@ public interface IPersonService {
 
 	Person findByName(String name);
 
-	List<Person> findAllOrderedByName();
+	List<Person> findAllByOrderByNameAsc();
 }
