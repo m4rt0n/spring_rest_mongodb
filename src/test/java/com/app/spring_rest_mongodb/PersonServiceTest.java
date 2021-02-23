@@ -1,19 +1,25 @@
 package com.app.spring_rest_mongodb;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ServiceTest {
+public class PersonServiceTest {
 	@Autowired
 	private PersonService service;
 	private List<Person> list = new ArrayList<>();
@@ -32,16 +38,16 @@ public class ServiceTest {
 
 	@Test
 	public void findAll() {
-		Assertions.assertNotNull(list);
-		Assertions.assertEquals(3, list.size());
+		assertNotNull(list);
+		assertEquals(3, list.size());
 	}
 
 	@Test
 	public void save() {
 		Person newPerson = new Person("NewName");
 		service.saveOrUpdate(newPerson);
-		Assertions.assertNotNull(newPerson.getId());
-		Assertions.assertTrue(newPerson.getId().length() > 0);
+		assertNotNull(newPerson.getId());
+		assertTrue(newPerson.getId().length() > 0);
 	}
 
 	@Test
@@ -50,14 +56,14 @@ public class ServiceTest {
 		Person updatePerson = new Person("updateName");
 		oldPerson.setName(updatePerson.getName());
 		service.saveOrUpdate(oldPerson);
-		Assertions.assertEquals("updateName", oldPerson.getName());
+		assertEquals("updateName", oldPerson.getName());
 	}
 
 	@Test
 	public void getById() {
 		Person p1 = list.get(0);
 		Optional<Person> p2 = service.getById(p1.getId());
-		Assertions.assertEquals(p1.getId(), p2.get().getId());
+		assertEquals(p1.getId(), p2.get().getId());
 	}
 
 	@Test
@@ -65,23 +71,22 @@ public class ServiceTest {
 		Person p1 = list.get(0);
 		service.deleteById(p1.getId());
 		List<Person> newList = service.findAll();
-		Assertions.assertNotEquals(newList.size(), list.size());
+		assertNotEquals(newList.size(), list.size());
 		Optional<Person> p2 = service.getById(p1.getId());
-		Assertions.assertTrue(p2.isEmpty());
-		Assertions.assertFalse(p2.isPresent());
+		assertTrue(p2.isEmpty());
+		assertFalse(p2.isPresent());
 	}
 
 	@Test
 	public void findAllOrderedByName() {
 		List<Person> orderedByService = service.findAllByOrderByNameAsc();
-		Assertions.assertNotNull(orderedByService);
-		Assertions.assertNotSame(list.get(0).getName(), orderedByService.get(0).getName());
+		assertNotNull(orderedByService);
+		assertNotSame(list.get(0).getName(), orderedByService.get(0).getName());
 
 		Comparator<Person> compareByName = (Person p1, Person p2) -> p1.getName().compareTo(p2.getName());
 		Collections.sort(list, compareByName);
-		Assertions.assertEquals(list.get(0).getName(), orderedByService.get(0).getName());
-		Assertions.assertEquals(list.get(0).getId(), orderedByService.get(0).getId());
-		// ? Assertions.assertSame(list.get(0), orderedByService.get(0));
+		assertEquals(list.get(0).getName(), orderedByService.get(0).getName());
+		assertEquals(list.get(0).getId(), orderedByService.get(0).getId());
 	}
 
 	@Test
@@ -89,16 +94,15 @@ public class ServiceTest {
 		Person personToFind = new Person("PersonToFind");
 		service.saveOrUpdate(personToFind);
 		Person personFound = service.findByName("PersonToFind");
-		Assertions.assertEquals(personToFind.getId(), personFound.getId());
-		Assertions.assertEquals(personToFind.getName(), personFound.getName());
-		// ? Assertions.assertSame(personFound, personToFind);
+		assertEquals(personToFind.getId(), personFound.getId());
+		assertEquals(personToFind.getName(), personFound.getName());
 	}
 
 	@Test
 	public void deleteAll() {
 		service.deleteAll();
 		List<Person> listAfterDelete = service.findAll();
-		Assertions.assertNotEquals(listAfterDelete.size(), list.size());
-		Assertions.assertEquals(0, listAfterDelete.size());
+		assertNotEquals(listAfterDelete.size(), list.size());
+		assertEquals(0, listAfterDelete.size());
 	}
 }
